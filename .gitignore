@@ -1,0 +1,5 @@
+.settings/
+.metadata/
+.project
+build/
+.DS_Store

@@ -1,0 +1,77 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="base.xhtml">
+	<ui:define name="content">
+	    <h2>Current books</h2>
+		    <p:messages id="messages" showDetail="false" autoUpdate="true" closable="true">
+		    	<p:effect event="load" type="fade" delay="3000" />
+		    </p:messages>
+		    <h:form id="form">
+			    <p:dataTable id="bookTable" value="#{bookController.bookModel}" var="localBook"
+			    	         paginator="true" rows="15">
+			    	<p:column headerText="ID">
+			    		<h:outputText value="#{localBook.bookId}" />
+			    	</p:column>
+			    	<p:column headerText="Title">
+			    		<p:commandLink value="#{localBook.title}" update=":bookDetailsForm:display" 
+			    		   			   oncomplete="bookDialog.show()" title="View">
+			    			<f:setPropertyActionListener target="#{bookController.selectedBook}" value="#{localBook}" />
+			    		</p:commandLink>
+			    	</p:column>
+			    	<p:column headerText="Author">
+			    		<h:outputText value="#{localBook.author}" />
+			    	</p:column>
+			    	<p:column headerText="Price">
+			    		<h:outputText value="#{localBook.price}" />
+			    	</p:column>
+			    	<p:column>
+			    		<p:commandLink value="Delete" oncomplete="bookDeleteDialog.show()">
+			    			<f:setPropertyActionListener target="#{bookController.selectedBook}" value="#{localBook}" />
+			    		</p:commandLink>
+			    	</p:column>
+			    </p:dataTable>
+		    </h:form>
+		    
+		    <p:dialog header="Book Details" widgetVar="bookDialog" resizable="false" id="bookDlg">
+		    	<h:form id="bookDetailsForm">
+		    		<p:panelGrid id="display" styleClass="dialogGrid" columns="2">
+		    			<h:outputText value="ID:"></h:outputText>
+		    			<h:outputText value="#{bookController.selectedBook.bookId}" />
+		    			
+		    			<h:outputText value="Title:" />
+		    			<h:inputText value="#{bookController.selectedBook.title}" required="true"
+		    						 requiredMessage="Please enter a title" />
+		    			
+		    			<h:outputText value="Author:" />
+		    			<h:inputText value="#{bookController.selectedBook.author}" required="true"
+		    						 requiredMessage="Please enter an author" />
+		    			
+		    			<h:outputText value="Price:" />
+		    			<h:inputText value="#{bookController.selectedBook.price}" required="true"
+		    						 requiredMessage="Please set a price" />
+		    			
+		    			<f:facet name="footer"> 
+		    				<p:commandButton value="Update" update=":form:bookTable, :messages"
+		    								 actionListener="#{bookController.update}" oncomplete="bookDialog.hide()" />
+		    			</f:facet>
+		    		</p:panelGrid>
+		    	</h:form>
+		    </p:dialog>
+		    <p:confirmDialog header="Deleting book" message="Are you sure?"
+		    				 widgetVar="bookDeleteDialog" severity="alert" id="bookDelDlg">
+		    	<h:form id="bookDeleteForm" style="margin: 0;">
+		    			<p:commandButton value="Yes" update=":form:bookTable, :messages"
+		    			  				 actionListener="#{bookController.delete}" oncomplete="bookDeleteDialog.hide()" />
+		    			<p:commandButton value="No" onclick="bookDeleteDialog.hide()" />
+		    	</h:form>
+		    </p:confirmDialog>
+	</ui:define>
+</ui:composition>
+</html>

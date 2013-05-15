@@ -1,0 +1,32 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="base.xhtml">
+	<ui:define name="content">
+		<p:messages id="messages" showDetail="false" autoUpdate="true" closable="true">
+			<p:effect event="load" type="fade" delay="3000" />
+		</p:messages>
+		<h:form id="createBookForm">
+			<legend>New book</legend>
+			<h:panelGrid id="grid" columns="2">
+			   	<h:outputLabel for="title" value="Title" />
+			   	<p:inputText label="Title" required="true" id="title" value="#{newBook.title}" />
+			   	<h:outputLabel for="author" value="Author" />
+			   	<p:inputText label="Author" required="true" id="author" value="#{newBook.author}" />
+			   	<h:outputLabel for="price" value="Price" />
+			   	<p:inputText label="Price" required="true" id="price" value="#{newBook.price}" />
+			</h:panelGrid>
+			<p:commandButton id="submit" value="Submit" action="#{bookController.create}" update=":createBookForm:grid, :messages"
+							 oncomplete="clearForm('createBookForm')" />
+		</h:form>
+		<h:outputScript library="primefaces" name="jquery/jquery.js" />
+		
+	</ui:define>
+</ui:composition>
+</html>
